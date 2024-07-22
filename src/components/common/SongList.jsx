@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRight, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRight,
+  faArrowLeft,
+  faCircleDown,
+} from "@fortawesome/free-solid-svg-icons";
 import fetchSong from "../../api/fetchSongs";
 import useNameFormatter from "../../hooks/useNameFormatter";
 import { languages } from "../../services/languages";
@@ -71,6 +75,7 @@ const SongList = ({ props, setProps, setFooterSong, setSongList }) => {
                 className="object-fill rounded-md h-40 w-40 sm:h-52 sm:w-52 md:h-60 md:w-60 lg:h-72 lg:w-72"
               />
               <p>{useNameFormatter(song.name)}</p>
+              <p>{song.year}</p>
             </div>
           ))}
         </div>

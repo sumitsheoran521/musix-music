@@ -33,19 +33,40 @@ const Footer = ({ footerSong, songList, currentSongIndex, setFooterSong }) => {
           console.error("Error occurred during playback:", error)
         );
 
-      const updateCurrentTime = () =>
+      const updateCurrentTime = () => {
         setCurrentTime(currentSong.current.currentTime);
+      };
+
+      const handleEndedSong = () => {
+        playNextSong();
+      };
 
       currentSong.current.addEventListener("timeupdate", updateCurrentTime);
+      currentSong.current.addEventListener("ended", handleEndedSong);
 
       return () => {
         currentSong.current.removeEventListener(
           "timeupdate",
           updateCurrentTime
         );
+        currentSong.current.removeEventListener("ended", handleEndedSong);
       };
     }
   }, [footerSong]);
+
+  useEffect(() => {
+    const handleSpacePressed = (e) => {
+      if (e.key === " ") {
+        e.preventDefault();
+        togglePlayButton();
+      }
+    };
+
+    document.addEventListener("keydown", handleSpacePressed);
+    return () => {
+      document.removeEventListener("keydown", handleSpacePressed);
+    };
+  }, [isSongPlaying]);
 
   const toggleMute = () => {
     setIsMuted(!isMuted);
@@ -81,7 +102,7 @@ const Footer = ({ footerSong, songList, currentSongIndex, setFooterSong }) => {
   };
 
   return (
-    <footer className="fixed bg-primary-nav text-gray-300 w-full items-center h-[6rem] left-0 right-0 border-none z-50 bottom-0 p-3">
+    <footer className="fixed bg-primary-nav text-gray-300 w-full items-center h-[6rem] md:h-[7rem] left-0 right-0 border-none z-50 bottom-0 p-3">
       <div>
         <input
           type="range"
@@ -118,17 +139,17 @@ const Footer = ({ footerSong, songList, currentSongIndex, setFooterSong }) => {
         </div>
         <div className="w-2/12 sm:w-1/3 flex justify-center items-center">
           <ul className="flex items-center gap-1 mr-5 sm:mr-0">
-            <li onClick={playPrevSong} className="hidden sm:inline-block">
+            <li  onClick={playPrevSong} className="hidden sm:inline-block ">
               <FontAwesomeIcon
                 icon={faBackwardStep}
                 className="size-9 p-2 hover:cursor-pointer"
               />
             </li>
-            <li>
+            <li className="flex items-center justify-center">
               <FontAwesomeIcon
                 icon={isPlayingButton ? faCirclePause : faCirclePlay}
                 onClick={togglePlayButton}
-                className="size-9 p-2 hover:cursor-pointer"
+                className="size-9 md:size-12 p-2 hover:cursor-pointer"
               />
             </li>
             <li onClick={playNextSong}>

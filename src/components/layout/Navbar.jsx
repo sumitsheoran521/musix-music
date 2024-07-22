@@ -17,7 +17,7 @@ const handleMenu = () => {
 
 const Navbar = ({ setProps }) => {
   const [inputValue, setInputValue] = useState('');
-
+  
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
@@ -25,6 +25,12 @@ const Navbar = ({ setProps }) => {
   const handleSearch = () => {
     setProps(inputValue);
   };
+
+  const enterPressed = (e) => {
+    if(e.key === "Enter" ) {
+      setProps(inputValue);
+    }
+  }
 
   const navLinks = menuItems.map((item, index) => {
     return (
@@ -53,6 +59,7 @@ const Navbar = ({ setProps }) => {
           className="outline-none flex-grow bg-primary-nav"
           value={inputValue}
           onChange={handleInputChange}
+          onKeyDown={enterPressed}
         />
         <button className="ml-2 bg-blue-700 text-white rounded-md px-3 py-1" onClick={handleSearch}>
           Search

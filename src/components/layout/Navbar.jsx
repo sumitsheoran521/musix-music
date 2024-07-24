@@ -6,7 +6,7 @@ import "../../assets/styles/navbar.css";
 
 const menuItems = [
   { text: "Home", href: "#", icon: faHome },
-  { text: "About Us", href: "#", icon: faYinYang },
+  { text: "About", href: "#", icon: faYinYang },
   { text: "Login", href: "#", icon: faUser }
 ];
 

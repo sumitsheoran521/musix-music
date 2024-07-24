@@ -56,7 +56,7 @@ const Footer = ({ footerSong, songList, currentSongIndex, setFooterSong }) => {
 
   useEffect(() => {
     const handleSpacePressed = (e) => {
-      if (e.key === " ") {
+      if (e.key === " " && e.target.tagName !== 'INPUT') {
         e.preventDefault();
         togglePlayButton();
       }
@@ -139,7 +139,7 @@ const Footer = ({ footerSong, songList, currentSongIndex, setFooterSong }) => {
         </div>
         <div className="w-2/12 sm:w-1/3 flex justify-center items-center">
           <ul className="flex items-center gap-1 mr-5 sm:mr-0">
-            <li  onClick={playPrevSong} className="hidden sm:inline-block ">
+            <li onClick={playPrevSong} className="hidden sm:inline-block ">
               <FontAwesomeIcon
                 icon={faBackwardStep}
                 className="size-9 p-2 hover:cursor-pointer"

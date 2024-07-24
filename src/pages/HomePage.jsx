@@ -1,6 +1,6 @@
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
-import SongList from "../components/common/SongList";
+import SongList from "../components/common/SongList.jsx";
 import { useState } from "react";
 
 const HomePage = () => {

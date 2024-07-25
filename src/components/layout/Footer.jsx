@@ -39,6 +39,7 @@ const Footer = ({ footerSong, songList, currentSongIndex, setFooterSong }) => {
 
       const handleEndedSong = () => {
         playNextSong();
+        setIsPlayingButton(false);
       };
 
       currentSong.current.addEventListener("timeupdate", updateCurrentTime);

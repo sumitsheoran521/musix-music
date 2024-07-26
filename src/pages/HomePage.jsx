@@ -1,5 +1,5 @@
-import Navbar from "../components/layout/Navbar";
-import Footer from "../components/layout/Footer";
+import Navbar from "../components/layout/Navbar.jsx";
+import Footer from "../components/layout/Footer.jsx";
 import SongList from "../components/common/SongList.jsx";
 import { useState } from "react";
 

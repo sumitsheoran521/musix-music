@@ -37,6 +37,8 @@ const Navbar = ({ setProps }) => {
   const enterPressed = (e) => {
     if (e.key === "Enter") {
       setProps(inputValue);
+      
+      setInputValue("");
     }
   };
 
@@ -52,7 +54,7 @@ const Navbar = ({ setProps }) => {
   });
 
   return (
-    <nav className="p-3 flex justify-between items-center bg-primary-nav text-gray-300">
+    <nav className="p-3 flex justify-between items-center bg-primary-nav text-gray-300 sticky top-0">
       <a href="/" className="flex items-center gap-2">
         <img src={logo} alt="logo" className="md:size-20 xs:size-16" />
       </a>

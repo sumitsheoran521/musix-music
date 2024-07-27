@@ -6,7 +6,8 @@
 
 ⚡️ Play song, view detailed information of song.\
 ⚡️ Search songs.\
-⚡️ Filter songs based on language and singer.\
+⚡️ Filter songs based on language\
+⚡️ Download Songs in different bitrates.\
 
 ## Upcomming Features in v3.0 📋
 

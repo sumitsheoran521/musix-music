@@ -6,6 +6,7 @@ import {
   faForwardStep,
   faVolumeHigh,
   faVolumeXmark,
+  faDownload,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useRef } from "react";
 import "../../assets/styles/footer.css";
@@ -18,6 +19,7 @@ const Footer = ({ footerSong, songList, currentSongIndex, setFooterSong }) => {
   const [isSongPlaying, setIsSongPlaying] = useState(false);
   const [currentVolume, setCurrentVolume] = useState(100);
   const [currentTime, setCurrentTime] = useState(0);
+  const [selectedKbps, setSelectedKbps] = useState("");
   const currentSong = useRef(new Audio());
 
   useEffect(() => {
@@ -45,6 +47,8 @@ const Footer = ({ footerSong, songList, currentSongIndex, setFooterSong }) => {
       currentSong.current.addEventListener("timeupdate", updateCurrentTime);
       currentSong.current.addEventListener("ended", handleEndedSong);
 
+      setSelectedKbps("");
+
       return () => {
         currentSong.current.removeEventListener(
           "timeupdate",
@@ -57,7 +61,7 @@ const Footer = ({ footerSong, songList, currentSongIndex, setFooterSong }) => {
 
   useEffect(() => {
     const handleSpacePressed = (e) => {
-      if (e.key === " " && e.target.tagName !== 'INPUT') {
+      if (e.key === " " && e.target.tagName !== "INPUT") {
         e.preventDefault();
         togglePlayButton();
       }
@@ -100,6 +104,26 @@ const Footer = ({ footerSong, songList, currentSongIndex, setFooterSong }) => {
     if (prevSongIndex >= 0) {
       setFooterSong(songList[prevSongIndex], prevSongIndex);
     }
+  };
+
+  const downloadSong = (kbpsIndex) => {
+    if (footerSong) {
+      const bitrates = ["12kbps", "48kbps", "96kbps", "160kbps", "320kbps"];
+      const link = document.createElement("a");
+      link.href = footerSong.downloadUrl[kbpsIndex].link;
+      link.download = `${footerSong.name}_${
+        bitrates[kbpsIndex]
+      }.mp3`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
+  const handleDownloadChange = (e) => {
+    const kbpsIndex = parseInt(e.target.value, 10);
+    setSelectedKbps(e.target.value);
+    downloadSong(kbpsIndex);
   };
 
   return (
@@ -188,6 +212,23 @@ const Footer = ({ footerSong, songList, currentSongIndex, setFooterSong }) => {
                 {useTimeFormatter(currentTime)} /{" "}
                 {footerSong ? useTimeFormatter(footerSong.duration) : "0:00"}
               </p>
+            </div>
+            <div className="relative inline-block">
+              <select
+                value={selectedKbps}
+                onChange={handleDownloadChange}
+                className="outline-none appearance-none ml-2 bg-blue-700 text-white rounded-md px-3 py-1"
+              >
+                <option value="" hidden>
+                  Download
+                </option>
+                <option value="0">12kbps</option>
+                <option value="1">48kbps</option>
+                <option value="2">96kbps</option>
+                <option value="3">160kbps</option>
+                <option value="4">320kbps</option>
+              </select>
+              
             </div>
           </div>
         </div>

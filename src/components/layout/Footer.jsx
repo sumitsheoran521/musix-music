@@ -228,7 +228,6 @@ const Footer = ({ footerSong, songList, currentSongIndex, setFooterSong }) => {
                 <option value="3">160kbps</option>
                 <option value="4">320kbps</option>
               </select>
-              
             </div>
           </div>
         </div>

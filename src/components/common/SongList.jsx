@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faCirclePlay } from "@fortawesome/free-solid-svg-icons";
-import {fetchSong} from "../../api/allAPIs";
+import { faCircleDown, faCirclePlay } from "@fortawesome/free-solid-svg-icons";
+import { fetchSong } from "../../api/allAPIs";
 import useNameFormatter from "../../hooks/useNameFormatter";
 import { languages } from "../../services/languages";
 import SongAlbum from "./SongAlbum";
@@ -13,12 +13,6 @@ const SongList = ({ props, setProps, setFooterSong, setSongList }) => {
   const observerRef = useRef();
 
   const { data, error, loading } = fetchSong(props, page);
-
-  const handleAlbumClick = (song) => {
-    console.log(song.album);
-    const albumSong = fetchAlbum(song.album.id);
-    return albumSong;
-  }
 
   useEffect(() => {
     //This will Reset page and song list when props change
@@ -32,7 +26,6 @@ const SongList = ({ props, setProps, setFooterSong, setSongList }) => {
       setSongs((prevSongs) => [...prevSongs, ...data.data.results]);
       setSongList((prevSongs) => [...prevSongs, ...data.data.results]);
       setIsFirstLoad(false);
-      console.log(data?.data?.results);
     }
   }, [data, setSongList]);
 
@@ -99,7 +92,7 @@ const SongList = ({ props, setProps, setFooterSong, setSongList }) => {
                     alt={`${song.name} album cover`}
                     className="object-fill rounded-md size-40 sm:size-52 md:size-60 lg:size-72"
                     onClick={() => {
-                      SongAlbum(song.album.id)
+                      SongAlbum(song.album.id);
                     }}
                   />
                   <div className="absolute size-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
@@ -111,12 +104,14 @@ const SongList = ({ props, setProps, setFooterSong, setSongList }) => {
                   </div>
                 </div>
                 <p>{useNameFormatter(song.name)}</p>
-                <p >{song.year}</p>
+                <p>{song.year}</p>
               </div>
             </div>
           ))}
         </div>
-        
+        <div ref={observerRef} className="text-center mt-10">
+          {loading && <FontAwesomeIcon icon={faCircleDown} spin />}
+        </div>
       </div>
     </div>
   );

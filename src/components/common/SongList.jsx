@@ -1,37 +1,53 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faArrowRight,
-  faArrowLeft,
-  faCircleDown,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleDown } from "@fortawesome/free-solid-svg-icons";
 import fetchSong from "../../api/fetchSongs";
 import useNameFormatter from "../../hooks/useNameFormatter";
 import { languages } from "../../services/languages";
 
 const SongList = ({ props, setProps, setFooterSong, setSongList }) => {
   const [page, setPage] = useState(1);
+  const [songs, setSongs] = useState([]);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const observerRef = useRef();
+
   const { data, error, loading } = fetchSong(props, page);
 
   useEffect(() => {
+    // Reset page and song list when props change
     setPage(1);
+    setSongs([]);
+    setIsFirstLoad(true);
   }, [props]);
 
   useEffect(() => {
     if (data?.data?.results) {
-      setSongList(data.data.results);
+      setSongs((prevSongs) => [...prevSongs, ...data.data.results]);
+      setSongList((prevSongs) => [...prevSongs, ...data.data.results]);
+      setIsFirstLoad(false);
     }
   }, [data, setSongList]);
 
-  const nextPage = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setPage((currPage) => currPage + 1);
-  };
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !isFirstLoad) {
+          setPage((currPage) => currPage + 1);
+        }
+      },
+      { threshold: 1.0 }
+    );
 
-  const prevPage = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setPage((currPage) => (currPage === 1 ? currPage : currPage - 1));
-  };
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [isFirstLoad]);
 
   return (
     <div className="text-white pb-28">
@@ -63,7 +79,7 @@ const SongList = ({ props, setProps, setFooterSong, setSongList }) => {
         {loading && <p>Loading...</p>}
         {error && <p>Error: {error}</p>}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 hover:cursor-pointer">
-          {data?.data?.results.map((song, index) => (
+          {songs.map((song, index) => (
             <div
               key={song.id}
               className="flex flex-col items-center"
@@ -79,26 +95,9 @@ const SongList = ({ props, setProps, setFooterSong, setSongList }) => {
             </div>
           ))}
         </div>
-      </div>
-      <div className="flex justify-center items-center mt-3 gap-4">
-        <button
-          onClick={prevPage}
-          className="border-2 rounded-full border-white"
-        >
-          <div className="flex justify-center items-center px-1">
-            <FontAwesomeIcon icon={faArrowLeft} className="p-1" />
-            <p className="p-2">Previous</p>
-          </div>
-        </button>
-        <button
-          onClick={data?.data?.results.length >= 40 ? nextPage : null}
-          className="border-2 rounded-full border-white"
-        >
-          <div className="flex justify-center items-center px-1">
-            <p className="p-2">Next</p>
-            <FontAwesomeIcon icon={faArrowRight} className="p-1" />
-          </div>
-        </button>
+        <div ref={observerRef} className="text-center mt-10">
+          {loading && <FontAwesomeIcon icon={faCircleDown} spin />}
+        </div>
       </div>
     </div>
   );

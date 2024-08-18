@@ -54,7 +54,7 @@ const Navbar = ({ setProps }) => {
   });
 
   return (
-    <nav className="p-3 flex justify-between items-center bg-primary-nav text-gray-300 sticky top-0">
+    <nav className="p-3 flex justify-between items-center bg-primary-nav text-gray-300 sticky top-0 z-50">
       <a href="/" className="flex items-center gap-2">
         <img src={logo} alt="logo" className="md:size-20 xs:size-16" />
       </a>

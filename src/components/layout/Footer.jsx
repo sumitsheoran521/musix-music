@@ -127,7 +127,7 @@ const Footer = ({ footerSong, songList, currentSongIndex, setFooterSong }) => {
   };
 
   return (
-    <footer className="fixed bg-primary-nav text-gray-300 w-full items-center h-[6rem] md:h-[7rem] left-0 right-0 border-none z-50 bottom-0 p-3">
+    <footer className="fixed bg-primary-nav text-gray-300 w-full items-center h-[6rem] md:h-[6rem] left-0 right-0 border-none z-50 bottom-0 p-3">
       <div>
         <input
           type="range"

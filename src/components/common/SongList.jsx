@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleDown, faCirclePlay } from "@fortawesome/free-solid-svg-icons";
 import { fetchSong } from "../../api/allAPIs";
 import useNameFormatter from "../../hooks/useNameFormatter";
 import { languages } from "../../services/languages";
-import SongAlbum from "./SongAlbum";
 
 const SongList = ({ props, setProps, setFooterSong, setSongList }) => {
   const [page, setPage] = useState(1);
   const [songs, setSongs] = useState([]);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const observerRef = useRef();
+  const navigate = useNavigate();
 
   const { data, error, loading } = fetchSong(props, page);
 
@@ -79,7 +80,7 @@ const SongList = ({ props, setProps, setFooterSong, setSongList }) => {
       <div className="my-5 mx-2 sm:mx-12">
         {loading && <p>Loading...</p>}
         {error && <p>Error: {error}</p>}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
           {songs.map((song, index) => (
             <div
               key={`${song.id}-${index}`}
@@ -90,12 +91,12 @@ const SongList = ({ props, setProps, setFooterSong, setSongList }) => {
                   <img
                     src={song.image[2].link}
                     alt={`${song.name} album cover`}
-                    className="object-fill rounded-md size-40 sm:size-52 md:size-60 lg:size-72"
+                    className="object-fill w-full h-full rounded-md size-36 sm:size-40 md:size-32 lg:size-40"
                     onClick={() => {
-                      SongAlbum(song.album.id);
+                      navigate(`/album/${song.album.id}`);
                     }}
                   />
-                  <div className="absolute size-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                  <div className="absolute size-20 flex rounded-full items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                     <FontAwesomeIcon
                       className="text-white size-20"
                       icon={faCirclePlay}
